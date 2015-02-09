@@ -1,0 +1,2 @@
+min level: 210
+max level: 500

@@ -1,0 +1,5 @@
+Plant 1 dry: 358	wet: 93
+plant 2 dry: 334	wet: 160
+plant 3 dry: 590	wet: 180
+
+average		427			144		
