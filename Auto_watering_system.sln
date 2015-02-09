@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Auto_watering_system", "Auto_watering_system.vcxproj", "{22066168-7590-4243-90E5-76A490EA6A4F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Line_Follower", "..\Line_Follower\Line_Follower.vcxproj", "{E0F45BA6-E90C-4E66-A5B3-28847B6CA928}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22066168-7590-4243-90E5-76A490EA6A4F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{22066168-7590-4243-90E5-76A490EA6A4F}.Debug|Win32.Build.0 = Debug|Win32
+		{22066168-7590-4243-90E5-76A490EA6A4F}.Release|Win32.ActiveCfg = Release|Win32
+		{22066168-7590-4243-90E5-76A490EA6A4F}.Release|Win32.Build.0 = Release|Win32
+		{E0F45BA6-E90C-4E66-A5B3-28847B6CA928}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E0F45BA6-E90C-4E66-A5B3-28847B6CA928}.Debug|Win32.Build.0 = Debug|Win32
+		{E0F45BA6-E90C-4E66-A5B3-28847B6CA928}.Release|Win32.ActiveCfg = Release|Win32
+		{E0F45BA6-E90C-4E66-A5B3-28847B6CA928}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
