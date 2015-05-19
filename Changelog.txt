@@ -1,0 +1,40 @@
+#AUTO WATERING SYSTEM#
+******CHANGELOG*******
+V 0.1
+Added code for reading the load cell.
+The code doesn't start the relays unless the loadcellvalue is over a
+certain level.
+Reading humidity sensors with analog pins instead of digital pins.
+Added code for reading load cell.
+Doesn't start relay unless loadcell has certain value.
+Prints messages to LCD.
+Reads humidity sensors with analog pins instead of digital pins.
+
+V 0.09
+Activate humidity sensor from DO-port on microcontroller
+Call readSensor with sensor number
+
+V.0.08
+Added pins for 3 sensors and 3 relays.
+TimeDelay can now be given any number.
+//Ex. timeDelay(2); for 2 hours
+
+V.0.07
+Relay will now only be activated for a short period
+Added time delay loop
+Sensor readings are taken every 10 seconds.
+
+V.0.06
+Added the relay to the circuit.
+The relay will start if humidity is low.
+
+V.0.05
+Humidity detection now works properly
+Outputs "low humidity" or "high humidity"
+along with the sensor state in the serial monitor.
+
+V.0.02
+Added serial communication for debugging
+
+V.0.01
+Initial version
