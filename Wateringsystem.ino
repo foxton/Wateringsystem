@@ -1,16 +1,21 @@
 /**#######################**\
 *
 *  WATERING SYSTEM
-*  V 0.1
-*
+*  V 0.2
+*	Programmer: Foxton
 */
+
+/*Version ID*/
+double versionID = 0.2;
+
+/*Libraries*/
 #include <LiquidCrystal.h> // Library for the LCD display.
 
 /*Variable declaration*/
-int loadCell = A0;	    // AI-pin for reading the loadCell
+int loadCell = A0;	    // A0: AI-pin for reading the loadCell
 int sensorRead1 = A1;	//
 int sensorRead2 = A2;	//
-int sensorRead3 = A3;	//  AI-pins for reading the humidity sensors
+int sensorRead3 = A3;	// A1-A4: AI-pins for reading the humidity sensors
 int sensorRead4 = A4;   //
 
 int relayPin1 = 6;	//
@@ -23,10 +28,12 @@ int loadcellValue;
 int loadcellAverage;
 int Hours;
 int Minutes;
-int dryLimit = 400;	//limit for soil moisture
+int dryLimit = 300;	//limit for soil moisture
+int watertankLimit = 250;
 int sensorID;
 
-// initialize the LCD library with the numbers of the interface pins
+
+/* initialize the LCD library with the numbers of the interface pins */
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 /*Setup*/
@@ -43,9 +50,15 @@ void setup()
 	pinMode(sensorStart, OUTPUT);  //Set sensorStart as input
 	pinMode(loadCell, INPUT);
 	Serial.begin(9600);			//for debugging
-	// set up the LCD's number of columns and rows: 
+	/* set up the LCD's number of columns and rows */
 	lcd.begin(16, 2);
 	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print("Watering system");
+	lcd.setCursor(0, 1);
+	lcd.print("Version ");
+	lcd.print(versionID);
+	delay(4000);
 }
 
 /*Loop*/
@@ -59,26 +72,19 @@ void loop()
 	lcd.print("Humidity:");
 	lcd.setCursor(0, 1);
 	lcd.print("Water:");
-	for (int n = 1; n < 6; n++)
-	{
-		loadcellValue = analogRead(loadCell);
-		loadcellAverage += loadcellValue;
-		Serial.print("load cell measurment: ");
-		Serial.print(n);
-		Serial.print(" ");
-		Serial.println(loadcellValue);
-		delay(100);
-	}
-	Serial.print("load cell average: ");
-	loadcellAverage = loadcellAverage / 5;
-	Serial.println(loadcellAverage);
+	delay(1000);
+
+	/*Check water level*/
+	loadcellAverage = readLoadcell(loadcellAverage);
+
 	lcd.setCursor(7, 1);
-	lcd.print(loadcellValue);
-	Serial.println(loadcellValue);
+	lcd.print(loadcellAverage);
+	Serial.println(loadcellAverage);
+	delay(5000);
 
-	/*Check water level and read humidity sensors*/
+	/*read humidity sensors*/
 
-	if (loadcellAverage >= 210)  //Don't start waterpump with too little water in tank
+	if (loadcellAverage >= watertankLimit)  //Don't start waterpump with too little water in tank
 	{
 		readSensor(sensorStart, sensorRead1, sensorState, relayPin1, 1);
 		//delay(10000);
@@ -90,29 +96,35 @@ void loop()
 		//delay(10000);
 		Serial.print('\n');
 		//readSensor(sensorStart, sensorRead4, sensorState, relayPin4);
-		Serial.print('\n');
+		//Serial.print('\n');
+
+		/* Time delay */
+
+		//shortDelay();
+		hourDelay(1);
+
+		//delayMinutes(20);
 	}
 	else
 	{
-		Serial.println("Fill Watertank");
-		Serial.println(loadcellAverage);
-		lcd.clear();
-		lcd.setCursor(0, 0);
-		lcd.print("Fill Watertank");
-		lcd.setCursor(0, 1);
-		lcd.print(loadcellAverage);
-		shortDelay;
+		while (loadcellAverage <= watertankLimit)
+		{
+			shortDelay();
+			lcd.clear();
+			lcd.setCursor(0, 0);
+			lcd.print("Fill Watertank");
+			lcd.setCursor(0, 1);
+			lcd.print(loadcellAverage);
+			loadcellAverage = readLoadcell(loadcellAverage);
+			Serial.println("Fill Watertank");
+		}
 	}
 
-	/* Time delay */
 
-	//shortDelay();
-	hourDelay(1);
-	//delayMinutes(20);
 }
 
 
-/**Function for reading sensor and checking the humidity, start pump if dry**/
+/*Function for reading sensor and checking the humidity, start pump if dry*/
 int readSensor(int sensorStart, int sensorRead, int sensorState, int relayPin, int sensorID)
 {
 	digitalWrite(sensorStart, HIGH);
@@ -131,7 +143,7 @@ int readSensor(int sensorStart, int sensorRead, int sensorState, int relayPin, i
 		Serial.print(sensorState);
 		Serial.print(" Low humidity ");
 		digitalWrite(relayPin, HIGH);
-		delay(1000);
+		delay(1500);
 		digitalWrite(relayPin, LOW);
 	}
 	else
@@ -142,7 +154,29 @@ int readSensor(int sensorStart, int sensorRead, int sensorState, int relayPin, i
 	return sensorState;
 }
 
-/**Time delay function, a couple of hours between each reading is good enough for most plants*/
+/*Function for reading the load cell, returns the average value*/
+int readLoadcell(int loadcellAverage)
+{
+	loadcellAverage = 0;
+	loadcellValue = 0;
+	for (int n = 1; n < 6; n++)
+	{
+		loadcellValue = analogRead(loadCell);
+		loadcellAverage += loadcellValue;
+		Serial.print("load cell measurment: ");
+		Serial.print(n);
+		Serial.print(" ");
+		Serial.println(loadcellValue);
+		delay(100);
+	}
+	Serial.print("load cell average: ");
+	Serial.println(loadcellAverage / 5);
+
+	return loadcellAverage / 5;
+}
+
+
+/*Time delay function, a couple of hours between each reading is good enough for most plants*/
 void hourDelay(int Hours)
 {
 	for (int n = 0; n < Hours; n++)  //Time delay loop (For longer time periods)
